@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Beer Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">Premium Beer Store</a>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Shop</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <div class="container">
+            <h1>Discover Extraordinary Beers</h1>
+            <p>Explore our curated selection of premium craft beers</p>
+            <a href="#featured-beers" class="btn">Shop Now</a>
+        </div>
+    </div>
+
+    <main>
+        <div class="container">
+            <h2 class="section-title" id="featured-beers">Featured Beers</h2>
+            <section class="beer-container">
+                <?php
+                // Connect to MySQL
+                $connection = new mysqli('localhost', 'root', 'mysql', 'beerstore');
+                // Check connection
+                if ($connection->connect_error) {
+                    die("Connection failed: " . $connection->connect_error);
+                }
+                // Query to get beers
+                $result = $connection->query("SELECT * FROM beers LIMIT 6");
+                // Display beers
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo '<div class="beer-card">';
+                        echo '<img src="' . htmlspecialchars($row['beer_image']) . '" alt="' . htmlspecialchars($row['beer_name']) . '" class="beer-image">';
+                        echo '<div class="beer-info">';
+                        echo '<h2 class="beer-name">' . htmlspecialchars($row['beer_name']) . '</h2>';
+                        echo '<p class="beer-price">$' . number_format($row['beer_price'], 2) . '</p>';
+                        echo '<p class="beer-description">' . htmlspecialchars($row['beer_description']) . '</p>';
+                        echo '<a href="#" class="btn">Add to Cart</a>';
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                } else {
+                    echo "<p>No beers found</p>";
+                }
+                // Close connection
+                $connection->close();
+                ?>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2024 Premium Beer Store. All rights reserved.</p>
+            <ul class="footer-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">FAQ</a></li>
+            </ul>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
